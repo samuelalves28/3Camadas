@@ -18,4 +18,10 @@ public abstract class BaseService
 
         return false;
     }
+
+    protected void Notificar(string mensagem)
+    {
+        // lancamento de notificacoes
+    }
+
 }
