@@ -1,6 +1,7 @@
 ﻿using Business.Interfaces.Repositories;
 using Business.Interfaces.Services;
 using Business.Models;
+using Business.Models.Validations;
 
 namespace Business.Services;
 
@@ -8,7 +9,9 @@ public class FornecedorService(IFornecedorRepository fornecedorRepository) : Bas
 {
     public async Task Adicionar(Fornecedor fornecedor)
     {
-        // validar se e consistente;
+        
+        if (!ExecuteValidacao(new FornecedorValidation(), fornecedor) || !ExecuteValidacao(new EnderecoValidation(), fornecedor.Endereco)) return;
+
         // validar se ja existe um fornecedor com o mesmo documento;
 
         await fornecedorRepository.Adicionar(fornecedor);
@@ -16,6 +19,8 @@ public class FornecedorService(IFornecedorRepository fornecedorRepository) : Bas
 
     public async Task Atualizar(Fornecedor fornecedor)
     {
+        if (!ExecuteValidacao(new FornecedorValidation(), fornecedor)) return;
+
         await fornecedorRepository.Atualizar(fornecedor);
     }
 
