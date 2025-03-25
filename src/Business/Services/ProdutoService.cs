@@ -1,11 +1,12 @@
-﻿using Business.Interfaces.Repositories;
+﻿using Business.Interfaces.Notificador;
+using Business.Interfaces.Repositories;
 using Business.Interfaces.Services;
 using Business.Models;
 using Business.Models.Validations;
 
 namespace Business.Services;
 
-public class ProdutoService(IProdutoRepository produtoRepository) : BaseService, IProdutoService
+public class ProdutoService(IProdutoRepository produtoRepository, INotificador notificador) : BaseService(notificador), IProdutoService
 {
     public async Task Adicionar(Produto produto)
     {

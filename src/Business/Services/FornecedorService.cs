@@ -1,11 +1,13 @@
-﻿using Business.Interfaces.Repositories;
+﻿using Business.Interfaces.Notificador;
+using Business.Interfaces.Repositories;
 using Business.Interfaces.Services;
 using Business.Models;
 using Business.Models.Validations;
+using Business.Notificacoes;
 
 namespace Business.Services;
 
-public class FornecedorService(IFornecedorRepository fornecedorRepository) : BaseService, IFornecedorService
+public class FornecedorService(IFornecedorRepository fornecedorRepository, INotificador notificador) : BaseService(notificador), IFornecedorService
 {
     public async Task Adicionar(Fornecedor fornecedor)
     {
@@ -44,7 +46,7 @@ public class FornecedorService(IFornecedorRepository fornecedorRepository) : Bas
             return;
         }
 
-        if (fornecedor.Produtos.Any())
+        if (fornecedor.Produtos.Count == 0)
         {
             Notificar("O fornecedor possui produtos cadastrados!");
             return;
@@ -53,9 +55,7 @@ public class FornecedorService(IFornecedorRepository fornecedorRepository) : Bas
         var endereco = await fornecedorRepository.ObterEnderecoPorFornecedor(id);
 
         if (endereco != null)
-        {
             await fornecedorRepository.RemoverEnderecoFornecedor(endereco);
-        }
 
         await fornecedorRepository.Remover(id);
     }
